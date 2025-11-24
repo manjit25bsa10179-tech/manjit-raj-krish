@@ -1,0 +1,91 @@
+class Account:
+    def __init__(self, acc_no, acc_holder, balance=0):
+        self.acc_no = acc_no
+        self.acc_holder = acc_holder
+        self.balance = balance
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            return f"Deposited {amount}. New balance: {self.balance}"
+        else:
+            return "Enter a valid amount to deposit."
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            return "Insufficient balance."
+        elif amount <= 0:
+            return "Enter a valid amount to withdraw."
+        else:
+            self.balance -= amount
+            return f"Withdrawn {amount}. New balance: {self.balance}"
+
+    def check_balance(self):
+        return f"Account Holder: {self.acc_holder}\nBalance: {self.balance}"
+
+class Bank:
+    def __init__(self):
+        self.accounts = {}
+
+    def create_account(self, acc_no, acc_holder, initial_deposit=0):
+        if acc_no in self.accounts:
+            return "Account already exists."
+        self.accounts[acc_no] = Account(acc_no, acc_holder, initial_deposit)
+        return "Account created successfully."
+
+    def deposit(self, acc_no, amount):
+        if acc_no not in self.accounts:
+            return "Account does not exist."
+        return self.accounts[acc_no].deposit(amount)
+
+    def withdraw(self, acc_no, amount):
+        if acc_no not in self.accounts:
+            return "Account does not exist."
+        return self.accounts[acc_no].withdraw(amount)
+
+    def check_balance(self, acc_no):
+        if acc_no not in self.accounts:
+            return "Account does not exist."
+        return self.accounts[acc_no].check_balance()
+
+def main():
+    bank = Bank()
+    while True:
+        print("\n--- Bank Management System ---")
+        print("1. Create Account")
+        print("2. Deposit Money")
+        print("3. Withdraw Money")
+        print("4. Check Balance")
+        print("5. Exit")
+
+        choice = input("Enter choice (1-5): ")
+
+        if choice == '1':
+            acc_no = input("Enter new account number: ")
+            acc_holder = input("Enter account holder name: ")
+            initial_deposit = float(input("Enter initial deposit amount: "))
+            print(bank.create_account(acc_no, acc_holder, initial_deposit))
+
+        elif choice == '2':
+            acc_no = input("Enter account number: ")
+            amount = float(input("Enter amount to deposit: "))
+            print(bank.deposit(acc_no, amount))
+
+        elif choice == '3':
+            acc_no = input("Enter account number: ")
+            amount = float(input("Enter amount to withdraw: "))
+            print(bank.withdraw(acc_no, amount))
+
+        elif choice == '4':
+            acc_no = input("Enter account number: ")
+            print(bank.check_balance(acc_no))
+
+        elif choice == '5':
+            print("Thank you for using the Bank Management System.")
+            break
+
+        else:
+            print("Invalid choice. Please enter a number between 1 and 5.")
+
+if __name__ == '__main__':
+    main()
